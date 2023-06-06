@@ -1,0 +1,2 @@
+# tg_sticker_image_format
+tg_sticker_image_format
