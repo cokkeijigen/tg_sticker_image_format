@@ -1,3 +1,4 @@
+# encoding:utf-8
 import os
 import sys
 
@@ -19,15 +20,22 @@ def folder(path: str) -> str:
     return path
     
 def run_handle(file_path: str) -> None:
-    file_list: list[str] = os.listdir(file_path)
+    isfile: bool = os.path.isfile(file_path)
+    if isfile:
+        fileN: str = os.path.basename(file_path)
+        file_path = os.path.dirname(file_path)
+        file_list: list[str] = [fileN]
+    else:
+        file_list: list[str] = os.listdir(file_path)
     if not (file_list or len(file_list) < 1): 
         return print('failed.')
-    
+    save_path: str = file_path if isfile else os.path.dirname(file_path)  + ('' if isfile else '\\image_new')
     from PIL import Image
     for file in file_list:
         try:
             img: Image = Image.open(str(f'{file_path}/{file}')).convert('RGBA')
-            save_file: str = f"{folder(f'{file_path}_new')}/{file[:file.find('.')] + '.png'}"
+            save_file: str = f"{folder(save_path)}\\{file[:file.find('.')]}{'_new' if  isfile else ''}.png"
+            print(save_path)
             if img.size[0] == img.size[1]:
                 img.resize((512, 512)).save(save_file)
             else:
@@ -49,6 +57,9 @@ def run_handle(file_path: str) -> None:
     pass
 
 if __name__ == '__main__':
-    check_import()
-    run_handle(sys.argv[1])
+    if len(sys.argv) != 2:
+        print(os.path.dirname("c:\\Users\\iTsukezigen\Desktop\\625141945.jpg"))
+    else:
+        check_import()
+        run_handle(sys.argv[1])
     pass
